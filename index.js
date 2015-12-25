@@ -21,7 +21,7 @@ function toaMorgan (format, options) {
   // output on request instead of response
   var immediate = !!options.immediate
   // check if log entry should be skipped
-  var skip = typeof options.skip === 'function' ? skip : null
+  var skip = typeof options.skip === 'function' ? options.skip : null
   // format function
   var formatLine = compile(formats[format] || format)
   // stream
@@ -29,17 +29,22 @@ function toaMorgan (format, options) {
 
   return function logger (done) {
     this._startTime = Date.now()
+    this._endTime = 0
 
     if (immediate) logRequest.call(this)
-    else this.once('end', logRequest)
+    else this.on('end', handle).on('finished', handle)
 
     done()
+
+    function handle () {
+      this.removeListener('end', handle).removeListener('finished', handle)
+      this._endTime = Date.now()
+      logRequest.call(this)
+    }
   }
 
   function logRequest () {
     if (skip && skip.call(this)) return
-
-    this._endTime = Date.now()
     var line = formatLine.call(this)
     if (line != null) stream.write(line + '\n')
   }
@@ -90,6 +95,12 @@ toaMorgan.format('combined', ':remote-addr - :remote-user [:date[clf]] ":method 
 toaMorgan.format('common', ':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length]')
 
 /**
+ * Short format.
+ */
+
+toaMorgan.format('short', ':remote-addr :remote-user :method :url HTTP/:http-version :status :res[content-length] - :response-time ms')
+
+/**
  * Tiny format.
  */
 toaMorgan.format('tiny', ':method :url :status :res[content-length] - :response-time ms')
@@ -138,7 +149,7 @@ toaMorgan.token('method', function () {
  * response time in milliseconds
  */
 toaMorgan.token('response-time', function () {
-  return this._endTime - this._startTime
+  return this._endTime ? (this._endTime - this._startTime) : '-'
 })
 
 /**
@@ -161,7 +172,7 @@ toaMorgan.token('date', function (format) {
  * response status code
  */
 toaMorgan.token('status', function () {
-  return this.status
+  return this.res.headersSent ? this.status : '-'
 })
 
 /**
@@ -225,6 +236,7 @@ toaMorgan.token('res', function (field) {
 var regex = /:([-\w]{2,})(?:\[([^\]]+)\])?/
 function compile (str) {
   if (typeof str === 'function') return str
+  if (typeof str !== 'string') throw new TypeError('argument format must be a string')
 
   var fns = []
   var tokenFn = 0
