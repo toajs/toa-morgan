@@ -35,12 +35,12 @@ function toaMorgan (format, options) {
     else this.on('end', handle).on('finished', handle)
 
     done()
+  }
 
-    function handle () {
-      this.removeListener('end', handle).removeListener('finished', handle)
-      this._endTime = Date.now()
-      logRequest.call(this)
-    }
+  function handle () {
+    this.removeListener('end', handle).removeListener('finished', handle)
+    this._endTime = Date.now()
+    logRequest.call(this)
   }
 
   function logRequest () {
@@ -97,7 +97,6 @@ toaMorgan.format('common', ':remote-addr - :remote-user [:date[clf]] ":method :u
 /**
  * Short format.
  */
-
 toaMorgan.format('short', ':remote-addr :remote-user :method :url HTTP/:http-version :status :res[content-length] - :response-time ms')
 
 /**
@@ -114,9 +113,9 @@ toaMorgan.format('dev', function developmentFormatLine () {
   // get status color
   var color = status >= 500 ? 31 // red
     : status >= 400 ? 33 // yellow
-      : status >= 300 ? 36 // cyan
-        : status >= 200 ? 32 // green
-          : 0 // no color
+    : status >= 300 ? 36 // cyan
+    : status >= 200 ? 32 // green
+    : 0 // no color
 
   // get colored function
   var fn = developmentFormatLine[color]
@@ -156,7 +155,7 @@ toaMorgan.token('response-time', function () {
  * current date
  */
 toaMorgan.token('date', function (format) {
-  var date = new Date(this._endTime)
+  var date = this._endTime ? new Date(this._endTime) : new Date()
 
   switch (format || 'web') {
     case 'clf':
@@ -193,7 +192,7 @@ toaMorgan.token('remote-addr', function () {
  * remote user
  */
 toaMorgan.token('remote-user', function () {
-  return ''
+  return '-'
 })
 
 /**
@@ -269,7 +268,6 @@ function compile (str) {
  * @return {function}
  * @private
  */
-
 function compileToken (token, arg) {
   var fn = tokens[token] || noOp
 
@@ -285,7 +283,6 @@ function compileToken (token, arg) {
  * @return {function}
  * @private
  */
-
 function compileStr (str) {
   return function () {
     return str
