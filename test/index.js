@@ -4,17 +4,16 @@
 // modified from https://github.com/expressjs/morgan/blob/master/test/morgan.js
 // **License:** MIT
 
-/*global describe, it*/
-
 var assert = require('assert')
 var Toa = require('toa')
+var tman = require('tman')
 var morgan = require('..')
 var split = require('split')
 var request = require('supertest')
 
-describe('toa-morgan', function () {
-  describe('arguments', function () {
-    it('should use default format', function (done) {
+tman.suite('toa-morgan', function () {
+  tman.suite('arguments', function () {
+    tman.it('should use default format', function (done) {
       var cb = after(2, function (err, res, line) {
         if (err) return done(err)
         assert.strictEqual(res.text.length > 0, true)
@@ -31,8 +30,8 @@ describe('toa-morgan', function () {
         .expect(200, cb)
     })
 
-    describe('format', function () {
-      it('should accept format as format name', function (done) {
+    tman.suite('format', function () {
+      tman.it('should accept format as format name', function (done) {
         var cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert(/^GET \/ 200 \d+ - \d+ ms$/.test(line))
@@ -48,7 +47,7 @@ describe('toa-morgan', function () {
           .expect(200, cb)
       })
 
-      it('should accept format as format string', function (done) {
+      tman.it('should accept format as format string', function (done) {
         var cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.equal(line, 'GET /')
@@ -64,7 +63,7 @@ describe('toa-morgan', function () {
           .expect(200, cb)
       })
 
-      it('should accept format as function', function (done) {
+      tman.it('should accept format as function', function (done) {
         var cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.equal(line, 'GET / 200')
@@ -84,15 +83,15 @@ describe('toa-morgan', function () {
           .expect(200, cb)
       })
 
-      it('should reject format as bool', function () {
+      tman.it('should reject format as bool', function () {
         assert.throws(createServer.bind(null, true), /argument format/)
       })
     })
   })
 
-  describe('tokens', function () {
-    describe(':date', function () {
-      it('should get current date in "web" format by default', function (done) {
+  tman.suite('tokens', function () {
+    tman.suite(':date', function () {
+      tman.it('should get current date in "web" format by default', function (done) {
         var cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.ok(/^\w{3}, \d{2} \w{3} \d{4} \d{2}:\d{2}:\d{2} GMT$/.test(line))
@@ -108,7 +107,7 @@ describe('toa-morgan', function () {
           .expect(200, cb)
       })
 
-      it('should get current date in "clf" format', function (done) {
+      tman.it('should get current date in "clf" format', function (done) {
         var cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.ok(/^\d{2}\/\w{3}\/\d{4}:\d{2}:\d{2}:\d{2} \+0000$/.test(line))
@@ -124,7 +123,7 @@ describe('toa-morgan', function () {
           .expect(200, cb)
       })
 
-      it('should get current date in "iso" format', function (done) {
+      tman.it('should get current date in "iso" format', function (done) {
         var cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.ok(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z$/.test(line))
@@ -140,7 +139,7 @@ describe('toa-morgan', function () {
           .expect(200, cb)
       })
 
-      it('should get current date in "web" format', function (done) {
+      tman.it('should get current date in "web" format', function (done) {
         var cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.ok(/^\w{3}, \d{2} \w{3} \d{4} \d{2}:\d{2}:\d{2} GMT$/.test(line))
@@ -156,7 +155,7 @@ describe('toa-morgan', function () {
           .expect(200, cb)
       })
 
-      it('should be blank for unknown format', function (done) {
+      tman.it('should be blank for unknown format', function (done) {
         var cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.equal(line, '-')
@@ -173,8 +172,8 @@ describe('toa-morgan', function () {
       })
     })
 
-    describe(':http-version', function () {
-      it('should be 1.0 or 1.1', function (done) {
+    tman.suite(':http-version', function () {
+      tman.it('should be 1.0 or 1.1', function (done) {
         var cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.ok(/^1\.[01]$/.test(line))
@@ -191,8 +190,8 @@ describe('toa-morgan', function () {
       })
     })
 
-    describe(':req', function () {
-      it('should get request properties', function (done) {
+    tman.suite(':req', function () {
+      tman.it('should get request properties', function (done) {
         var cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.equal(line, 'me')
@@ -209,7 +208,7 @@ describe('toa-morgan', function () {
           .expect(200, cb)
       })
 
-      it('should display all values of array headers', function (done) {
+      tman.it('should display all values of array headers', function (done) {
         var cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.equal(line, 'foo=bar, fizz=buzz')
@@ -227,8 +226,8 @@ describe('toa-morgan', function () {
       })
     })
 
-    describe(':res', function () {
-      it('should get response properties', function (done) {
+    tman.suite(':res', function () {
+      tman.it('should get response properties', function (done) {
         var cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.equal(line, 'true')
@@ -244,7 +243,7 @@ describe('toa-morgan', function () {
           .expect(200, cb)
       })
 
-      it('should display all values of array headers', function (done) {
+      tman.it('should display all values of array headers', function (done) {
         var cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.equal(line, 'foo, bar')
@@ -267,8 +266,8 @@ describe('toa-morgan', function () {
       })
     })
 
-    describe(':remote-addr', function () {
-      it('should get remote address', function (done) {
+    tman.suite(':remote-addr', function () {
+      tman.it('should get remote address', function (done) {
         var cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.ok(res.text.length > 0)
@@ -285,7 +284,7 @@ describe('toa-morgan', function () {
           .expect(200, cb)
       })
 
-      it('should work when connection: close', function (done) {
+      tman.it('should work when connection: close', function (done) {
         var cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.ok(res.text.length > 0)
@@ -303,7 +302,7 @@ describe('toa-morgan', function () {
           .expect(200, cb)
       })
 
-      it('should work when connection: keep-alive', function (done) {
+      tman.it('should work when connection: keep-alive', function (done) {
         var cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.ok(res.text.length > 0)
@@ -328,7 +327,7 @@ describe('toa-morgan', function () {
           .expect(200, cb)
       })
 
-      it('should not fail if req.connection missing', function (done) {
+      tman.it('should not fail if req.connection missing', function (done) {
         var cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.ok(res.text.length > 0)
@@ -354,8 +353,8 @@ describe('toa-morgan', function () {
       })
     })
 
-    describe(':remote-user', function () {
-      it('should be empty if none present', function (done) {
+    tman.suite(':remote-user', function () {
+      tman.it('should be empty if none present', function (done) {
         var cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.equal(line, '-')
@@ -372,8 +371,8 @@ describe('toa-morgan', function () {
       })
     })
 
-    describe(':response-time', function () {
-      it('should be in milliseconds', function (done) {
+    tman.suite(':response-time', function () {
+      tman.it('should be in milliseconds', function (done) {
         var cb = after(2, function (err, res, line) {
           if (err) return done(err)
           var end = Date.now()
@@ -394,7 +393,7 @@ describe('toa-morgan', function () {
           .expect(200, cb)
       })
 
-      it('should not include response latency', function (done) {
+      tman.it('should not include response latency', function (done) {
         var end
         var cb = after(2, function (err, res, line) {
           if (err) return done(err)
@@ -427,7 +426,7 @@ describe('toa-morgan', function () {
           .expect(200, cb)
       })
 
-      it('should be empty before response', function (done) {
+      tman.it('should be empty before response', function (done) {
         var cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.equal(line, '-')
@@ -449,8 +448,8 @@ describe('toa-morgan', function () {
       })
     })
 
-    describe(':status', function () {
-      it('should get response status', function (done) {
+    tman.suite(':status', function () {
+      tman.it('should get response status', function (done) {
         var cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.equal(line, String(res.statusCode))
@@ -466,7 +465,7 @@ describe('toa-morgan', function () {
           .expect(200, cb)
       })
 
-      it('should not exist before response sent', function (done) {
+      tman.it('should not exist before response sent', function (done) {
         var cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.equal(line, '-')
@@ -487,7 +486,7 @@ describe('toa-morgan', function () {
           .expect(200, cb)
       })
 
-      it('should not exist for aborted request', function (done) {
+      tman.it('should not exist for aborted request', function (done) {
         var stream = createLineStream(function (line) {
           assert.equal(line, '-')
           server.close(done)
@@ -504,8 +503,8 @@ describe('toa-morgan', function () {
       })
     })
 
-    describe(':url', function () {
-      it('should get request URL', function (done) {
+    tman.suite(':url', function () {
+      tman.it('should get request URL', function (done) {
         var cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.equal(line, '/foo')
@@ -521,7 +520,7 @@ describe('toa-morgan', function () {
           .expect(200, cb)
       })
 
-      it('should use this.originalUrl if exists', function (done) {
+      tman.it('should use this.originalUrl if exists', function (done) {
         var cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.equal(line, '/bar')
@@ -542,7 +541,7 @@ describe('toa-morgan', function () {
           .expect(200, cb)
       })
 
-      it('should not exist for aborted request', function (done) {
+      tman.it('should not exist for aborted request', function (done) {
         var stream = createLineStream(function (line) {
           assert.equal(line, '-')
           server.close(done)
@@ -560,9 +559,9 @@ describe('toa-morgan', function () {
     })
   })
 
-  describe('formats', function () {
-    describe('a function', function () {
-      it('should log result of function', function (done) {
+  tman.suite('formats', function () {
+    tman.suite('a function', function () {
+      tman.it('should log result of function', function (done) {
         var cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.equal(line, 'GET / 200')
@@ -582,7 +581,7 @@ describe('toa-morgan', function () {
           .expect(200, cb)
       })
 
-      it('should not log for undefined return', function (done) {
+      tman.it('should not log for undefined return', function (done) {
         var stream = createLineStream(function () {
           throw new Error('should not log line')
         })
@@ -596,7 +595,7 @@ describe('toa-morgan', function () {
           .expect(200, done)
       })
 
-      it('should not log for null return', function (done) {
+      tman.it('should not log for null return', function (done) {
         var stream = createLineStream(function () {
           throw new Error('should not log line')
         })
@@ -611,8 +610,8 @@ describe('toa-morgan', function () {
       })
     })
 
-    describe('combined', function () {
-      it('should match expectations', function (done) {
+    tman.suite('combined', function () {
+      tman.it('should match expectations', function (done) {
         var cb = after(2, function (err, res, line) {
           if (err) return done(err)
           var masked = line
@@ -634,8 +633,8 @@ describe('toa-morgan', function () {
       })
     })
 
-    describe('common', function () {
-      it('should match expectations', function (done) {
+    tman.suite('common', function () {
+      tman.it('should match expectations', function (done) {
         var cb = after(2, function (err, res, line) {
           if (err) return done(err)
           var masked = line
@@ -655,8 +654,8 @@ describe('toa-morgan', function () {
       })
     })
 
-    describe('dev', function () {
-      it('should not color 1xx', function (done) {
+    tman.suite('dev', function () {
+      tman.it('should not color 1xx', function (done) {
         var cb = after(2, function (err, res, line) {
           if (err) return done(err)
           var masked = line.replace(/\x1b\[(\d+)m/g, '_color_$1_')
@@ -678,7 +677,7 @@ describe('toa-morgan', function () {
           .expect(102, cb)
       })
 
-      it('should color 2xx green', function (done) {
+      tman.it('should color 2xx green', function (done) {
         var cb = after(2, function (err, res, line) {
           if (err) return done(err)
           var masked = line.replace(/\x1b\[(\d+)m/g, '_color_$1_')
@@ -701,7 +700,7 @@ describe('toa-morgan', function () {
           .expect(200, cb)
       })
 
-      it('should color 3xx cyan', function (done) {
+      tman.it('should color 3xx cyan', function (done) {
         var cb = after(2, function (err, res, line) {
           if (err) return done(err)
           var masked = line.replace(/\x1b\[(\d+)m/g, '_color_$1_')
@@ -723,7 +722,7 @@ describe('toa-morgan', function () {
           .expect(300, cb)
       })
 
-      it('should color 4xx yelow', function (done) {
+      tman.it('should color 4xx yelow', function (done) {
         var cb = after(2, function (err, res, line) {
           if (err) return done(err)
           var masked = line.replace(/\x1b\[(\d+)m/g, '_color_$1_')
@@ -745,7 +744,7 @@ describe('toa-morgan', function () {
           .expect(400, cb)
       })
 
-      it('should color 5xx red', function (done) {
+      tman.it('should color 5xx red', function (done) {
         var cb = after(2, function (err, res, line) {
           if (err) return done(err)
           var masked = line.replace(/\x1b\[(\d+)m/g, '_color_$1_')
@@ -768,8 +767,8 @@ describe('toa-morgan', function () {
       })
     })
 
-    describe('short', function () {
-      it('should match expectations', function (done) {
+    tman.suite('short', function () {
+      tman.it('should match expectations', function (done) {
         var cb = after(2, function (err, res, line) {
           if (err) return done(err)
           var masked = line.replace(/\d+ ms/, '- ms').replace(/200 \d+/, '200 -')
@@ -787,8 +786,8 @@ describe('toa-morgan', function () {
       })
     })
 
-    describe('tiny', function () {
-      it('should match expectations', function (done) {
+    tman.suite('tiny', function () {
+      tman.it('should match expectations', function (done) {
         var cb = after(2, function (err, res, line) {
           if (err) return done(err)
           var masked = line.replace(/200 \d+/, '200 -').replace(/\d+ ms/, '- ms')
@@ -807,8 +806,8 @@ describe('toa-morgan', function () {
     })
   })
 
-  describe('with immediate option', function () {
-    it('should not have value for :res', function (done) {
+  tman.suite('with immediate option', function () {
+    tman.it('should not have value for :res', function (done) {
       var cb = after(2, function (err, res, line) {
         if (err) return done(err)
         assert.equal(line, 'GET / -')
@@ -829,7 +828,7 @@ describe('toa-morgan', function () {
         .expect(200, cb)
     })
 
-    it('should not have value for :response-time', function (done) {
+    tman.it('should not have value for :response-time', function (done) {
       var cb = after(2, function (err, res, line) {
         if (err) return done(err)
         assert.equal(line, 'GET / -')
@@ -850,7 +849,7 @@ describe('toa-morgan', function () {
         .expect(200, cb)
     })
 
-    it('should not have value for :status', function (done) {
+    tman.it('should not have value for :status', function (done) {
       var cb = after(2, function (err, res, line) {
         if (err) return done(err)
         assert.equal(line, 'GET / -')
@@ -871,7 +870,7 @@ describe('toa-morgan', function () {
         .expect(200, cb)
     })
 
-    it('should log before response', function (done) {
+    tman.it('should log before response', function (done) {
       var lineLogged = false
       var cb = after(2, function (err, res, line) {
         if (err) return done(err)
@@ -895,8 +894,8 @@ describe('toa-morgan', function () {
     })
   })
 
-  describe('with skip option', function () {
-    it('should be able to skip based on request', function (done) {
+  tman.suite('with skip option', function () {
+    tman.it('should be able to skip based on request', function (done) {
       var stream = createLineStream(function () {
         throw new Error('should not log line')
       })
@@ -911,7 +910,7 @@ describe('toa-morgan', function () {
         .expect(200, done)
     })
 
-    it('should be able to skip based on response', function (done) {
+    tman.it('should be able to skip based on response', function (done) {
       var stream = createLineStream(function () {
         throw new Error('should not log line')
       })

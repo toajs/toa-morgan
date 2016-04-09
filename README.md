@@ -4,6 +4,7 @@ HTTP request logger middleware for Toa.
 
 [![NPM version][npm-image]][npm-url]
 [![Build Status][travis-image]][travis-url]
+[![Downloads][downloads-image]][downloads-url]
 
 > Modified from https://github.com/expressjs/morgan
 
@@ -232,3 +233,6 @@ The contents of the User-Agent header of the request.
 
 [travis-url]: https://travis-ci.org/toajs/toa-morgan
 [travis-image]: http://img.shields.io/travis/toajs/toa-morgan.svg
+
+[downloads-url]: https://npmjs.org/package/toa-morgan
+[downloads-image]: http://img.shields.io/npm/dm/toa-morgan.svg?style=flat-square
