@@ -4,12 +4,12 @@
 // modified from https://github.com/expressjs/morgan/blob/master/test/morgan.js
 // **License:** MIT
 
-var assert = require('assert')
 var Toa = require('toa')
 var tman = require('tman')
-var morgan = require('..')
 var split = require('split')
+var assert = require('assert')
 var request = require('supertest')
+var morgan = require('..')
 
 tman.suite('toa-morgan', function () {
   tman.suite('arguments', function () {
@@ -658,7 +658,7 @@ tman.suite('toa-morgan', function () {
       tman.it('should not color 1xx', function (done) {
         var cb = after(2, function (err, res, line) {
           if (err) return done(err)
-          var masked = line.replace(/\x1b\[(\d+)m/g, '_color_$1_')
+          var masked = line.replace(/\x1b\[(\d+)m/g, '_color_$1_') // eslint-disable-line
           assert.equal(masked.substr(0, 37), '_color_0_GET / _color_0_102 _color_0_')
           assert.equal(masked.substr(-9), '_color_0_')
           done()
@@ -680,7 +680,7 @@ tman.suite('toa-morgan', function () {
       tman.it('should color 2xx green', function (done) {
         var cb = after(2, function (err, res, line) {
           if (err) return done(err)
-          var masked = line.replace(/\x1b\[(\d+)m/g, '_color_$1_')
+          var masked = line.replace(/\x1b\[(\d+)m/g, '_color_$1_') // eslint-disable-line
           assert.equal(masked.substr(0, 38), '_color_0_GET / _color_32_200 _color_0_')
           assert.equal(masked.substr(-9), '_color_0_')
           done()
@@ -703,7 +703,7 @@ tman.suite('toa-morgan', function () {
       tman.it('should color 3xx cyan', function (done) {
         var cb = after(2, function (err, res, line) {
           if (err) return done(err)
-          var masked = line.replace(/\x1b\[(\d+)m/g, '_color_$1_')
+          var masked = line.replace(/\x1b\[(\d+)m/g, '_color_$1_') // eslint-disable-line
           assert.equal(masked.substr(0, 38), '_color_0_GET / _color_36_300 _color_0_')
           assert.equal(masked.substr(-9), '_color_0_')
           done()
@@ -725,7 +725,7 @@ tman.suite('toa-morgan', function () {
       tman.it('should color 4xx yelow', function (done) {
         var cb = after(2, function (err, res, line) {
           if (err) return done(err)
-          var masked = line.replace(/\x1b\[(\d+)m/g, '_color_$1_')
+          var masked = line.replace(/\x1b\[(\d+)m/g, '_color_$1_') // eslint-disable-line
           assert.equal(masked.substr(0, 38), '_color_0_GET / _color_33_400 _color_0_')
           assert.equal(masked.substr(-9), '_color_0_')
           done()
@@ -747,7 +747,7 @@ tman.suite('toa-morgan', function () {
       tman.it('should color 5xx red', function (done) {
         var cb = after(2, function (err, res, line) {
           if (err) return done(err)
-          var masked = line.replace(/\x1b\[(\d+)m/g, '_color_$1_')
+          var masked = line.replace(/\x1b\[(\d+)m/g, '_color_$1_') // eslint-disable-line
           assert.equal(masked.substr(0, 38), '_color_0_GET / _color_31_500 _color_0_')
           assert.equal(masked.substr(-9), '_color_0_')
           done()

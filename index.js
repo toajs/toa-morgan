@@ -32,13 +32,13 @@ function toaMorgan (format, options) {
     this._endTime = 0
 
     if (immediate) logRequest.call(this)
-    else this.on('end', handle).on('finished', handle)
+    else this.on('end', handle).on('close', handle)
 
     done()
   }
 
   function handle () {
-    this.removeListener('end', handle).removeListener('finished', handle)
+    this.removeListener('end', handle).removeListener('close', handle)
     this._endTime = Date.now()
     logRequest.call(this)
   }
