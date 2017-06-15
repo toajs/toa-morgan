@@ -2,13 +2,13 @@
 // **Github:** https://github.com/toajs/toa-morgan
 //
 // **License:** MIT
-var Toa = require('toa')
-var toaMorgan = require('../index')
+const Toa = require('toa')
+const toaMorgan = require('../index')
 
-var app = Toa(function () {
+const app = new Toa()
+app.use(toaMorgan())
+app.use(function () {
   this.body = 'Hello!'
 })
-
-app.use(toaMorgan())
 
 app.listen(3000)

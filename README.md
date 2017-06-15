@@ -1,5 +1,5 @@
-toa-morgan
-====
+# toa-morgan
+
 HTTP request logger middleware for Toa.
 
 [![NPM version][npm-image]][npm-url]
@@ -15,14 +15,14 @@ HTTP request logger middleware for Toa.
 Simple app that will log all request in the Apache combined format to STDOUT
 
 ```js
-var Toa = require('toa')
-var toaMorgan = require('toa-morgan')
+const Toa = require('toa')
+const toaMorgan = require('toa-morgan')
 
-var app = Toa(function () {
+const app = new Toa()
+app.use(toaMorgan())
+app.use(function () {
   this.body = 'Hello!'
 })
-
-app.use(toaMorgan())
 
 app.listen(3000)
 ```
@@ -33,18 +33,18 @@ Simple app that will log all requests in the Apache combined format to the file
 `access.log`.
 
 ```js
-var fs = require('fs')
-var Toa = require('toa')
-var toaMorgan = require('toa-morgan')
+const fs = require('fs')
+const Toa = require('toa')
+const toaMorgan = require('toa-morgan')
 
 // create a write stream (in append mode)
-var accessLogStream = fs.createWriteStream(__dirname + '/access.log', {flags: 'a'})
+const accessLogStream = fs.createWriteStream(__dirname + '/access.log', {flags: 'a'})
 
-var app = Toa(function () {
+const app = new Toa()
+app.use(toaMorgan('common', {stream: accessLogStream}))
+app.use(function () {
   this.body = 'Hello!'
 })
-
-app.use(toaMorgan('common', {stream: accessLogStream}))
 
 app.listen(3000)
 ```
@@ -54,31 +54,31 @@ app.listen(3000)
 Sample app that will use custom token formats. This adds an ID to all requests and displays it using the `:id` token.
 
 ```js
-var Toa = require('toa')
-var uuid = require('uuid')
-var toaMorgan = require('toa-morgan')
+const Toa = require('toa')
+const uuid = require('uuid')
+const toaMorgan = require('toa-morgan')
 
 toaMorgan.token('id', function () {
   return this.state.id
 })
 
-var app = Toa(function () {
-  this.body = 'Hello!'
-})
-
+const app = new Toa()
 app.use(toaMorgan(':id :method :url :response-time'))
 app.use(function (next) {
   this.state.id = uuid.v4()
   next()
 })
 
+app.use(function () {
+  this.body = 'Hello!'
+})
 app.listen(3000)
 ```
 
 ## API
 
 ```js
-var morgan = require('toa-morgan')
+const morgan = require('toa-morgan')
 ```
 
 ### morgan([format, options])
@@ -123,7 +123,7 @@ There are various pre-defined formats provided:
 
 Standard Apache combined log output. It is default format.
 
-```
+```text
 :remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"
 ```
 
@@ -131,7 +131,7 @@ Standard Apache combined log output. It is default format.
 
 Standard Apache common log output.
 
-```
+```text
 :remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length]
 ```
 
@@ -141,7 +141,7 @@ Concise output colored by response status for development use. The `:status`
 token will be colored red for server error codes, yellow for client error
 codes, cyan for redirection codes, and uncolored for all other codes.
 
-```
+```text
 :method :url :status :response-time ms - :res[content-length]
 ```
 
@@ -149,7 +149,7 @@ codes, cyan for redirection codes, and uncolored for all other codes.
 
 The minimal output.
 
-```
+```text
 :method :url :status :res[content-length] - :response-time ms
 ```
 
@@ -158,6 +158,7 @@ The minimal output.
 ##### Creating new tokens
 
 To define a token, simply invoke `morgan.token` with the name and a callback function. This callback function is expected to return a string value. The value returned is then available as ":type" in this case:
+
 ```js
 morgan.token('type', function () {
   return this.get('content-type')
@@ -170,9 +171,9 @@ Calling `morgan.token` using the same name as an existing token will overwrite t
 
 The current date and time in UTC. The available formats are:
 
-  - `clf` for the common log format (`"10/Oct/2000:13:55:36 +0000"`)
-  - `iso` for the common ISO 8601 date time format (`2000-10-10T13:55:36.000Z`)
-  - `web` for the common RFC 1123 date time format (`Tue, 10 Oct 2000 13:55:36 GMT`)
+- `clf` for the common log format (`"10/Oct/2000:13:55:36 +0000"`)
+- `iso` for the common ISO 8601 date time format (`2000-10-10T13:55:36.000Z`)
+- `web` for the common RFC 1123 date time format (`Tue, 10 Oct 2000 13:55:36 GMT`)
 
 If no format is given, then the default is `web`.
 
@@ -226,6 +227,7 @@ The URL of the request. This will use `this.originalUrl`.
 The contents of the User-Agent header of the request.
 
 ## Licences
+
 (The MIT License)
 
 [npm-url]: https://npmjs.org/package/toa-morgan

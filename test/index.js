@@ -4,24 +4,24 @@
 // modified from https://github.com/expressjs/morgan/blob/master/test/morgan.js
 // **License:** MIT
 
-var Toa = require('toa')
-var tman = require('tman')
-var split = require('split')
-var assert = require('assert')
-var request = require('supertest')
-var morgan = require('..')
+const Toa = require('toa')
+const tman = require('tman')
+const split = require('split')
+const assert = require('assert')
+const request = require('supertest')
+const morgan = require('..')
 
 tman.suite('toa-morgan', function () {
   tman.suite('arguments', function () {
     tman.it('should use default format', function (done) {
-      var cb = after(2, function (err, res, line) {
+      let cb = after(2, function (err, res, line) {
         if (err) return done(err)
         assert.strictEqual(res.text.length > 0, true)
         assert.strictEqual(line.substr(0, res.text.length), res.text)
         done()
       })
 
-      var stream = createLineStream(function (line) {
+      let stream = createLineStream(function (line) {
         cb(null, null, line)
       })
 
@@ -32,13 +32,13 @@ tman.suite('toa-morgan', function () {
 
     tman.suite('format', function () {
       tman.it('should accept format as format name', function (done) {
-        var cb = after(2, function (err, res, line) {
+        let cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert(/^GET \/ 200 \d+ - \d+ ms$/.test(line))
           done()
         })
 
-        var stream = createLineStream(function (line) {
+        let stream = createLineStream(function (line) {
           cb(null, null, line)
         })
 
@@ -48,13 +48,13 @@ tman.suite('toa-morgan', function () {
       })
 
       tman.it('should accept format as format string', function (done) {
-        var cb = after(2, function (err, res, line) {
+        let cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.equal(line, 'GET /')
           done()
         })
 
-        var stream = createLineStream(function (line) {
+        let stream = createLineStream(function (line) {
           cb(null, null, line)
         })
 
@@ -64,13 +64,13 @@ tman.suite('toa-morgan', function () {
       })
 
       tman.it('should accept format as function', function (done) {
-        var cb = after(2, function (err, res, line) {
+        let cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.equal(line, 'GET / 200')
           done()
         })
 
-        var stream = createLineStream(function (line) {
+        let stream = createLineStream(function (line) {
           cb(null, null, line)
         })
 
@@ -92,13 +92,13 @@ tman.suite('toa-morgan', function () {
   tman.suite('tokens', function () {
     tman.suite(':date', function () {
       tman.it('should get current date in "web" format by default', function (done) {
-        var cb = after(2, function (err, res, line) {
+        let cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.ok(/^\w{3}, \d{2} \w{3} \d{4} \d{2}:\d{2}:\d{2} GMT$/.test(line))
           done()
         })
 
-        var stream = createLineStream(function (line) {
+        let stream = createLineStream(function (line) {
           cb(null, null, line)
         })
 
@@ -108,13 +108,13 @@ tman.suite('toa-morgan', function () {
       })
 
       tman.it('should get current date in "clf" format', function (done) {
-        var cb = after(2, function (err, res, line) {
+        let cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.ok(/^\d{2}\/\w{3}\/\d{4}:\d{2}:\d{2}:\d{2} \+0000$/.test(line))
           done()
         })
 
-        var stream = createLineStream(function (line) {
+        let stream = createLineStream(function (line) {
           cb(null, null, line)
         })
 
@@ -124,13 +124,13 @@ tman.suite('toa-morgan', function () {
       })
 
       tman.it('should get current date in "iso" format', function (done) {
-        var cb = after(2, function (err, res, line) {
+        let cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.ok(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z$/.test(line))
           done()
         })
 
-        var stream = createLineStream(function (line) {
+        let stream = createLineStream(function (line) {
           cb(null, null, line)
         })
 
@@ -140,13 +140,13 @@ tman.suite('toa-morgan', function () {
       })
 
       tman.it('should get current date in "web" format', function (done) {
-        var cb = after(2, function (err, res, line) {
+        let cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.ok(/^\w{3}, \d{2} \w{3} \d{4} \d{2}:\d{2}:\d{2} GMT$/.test(line))
           done()
         })
 
-        var stream = createLineStream(function (line) {
+        let stream = createLineStream(function (line) {
           cb(null, null, line)
         })
 
@@ -156,13 +156,13 @@ tman.suite('toa-morgan', function () {
       })
 
       tman.it('should be blank for unknown format', function (done) {
-        var cb = after(2, function (err, res, line) {
+        let cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.equal(line, '-')
           done()
         })
 
-        var stream = createLineStream(function (line) {
+        let stream = createLineStream(function (line) {
           cb(null, null, line)
         })
 
@@ -174,13 +174,13 @@ tman.suite('toa-morgan', function () {
 
     tman.suite(':http-version', function () {
       tman.it('should be 1.0 or 1.1', function (done) {
-        var cb = after(2, function (err, res, line) {
+        let cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.ok(/^1\.[01]$/.test(line))
           done()
         })
 
-        var stream = createLineStream(function (line) {
+        let stream = createLineStream(function (line) {
           cb(null, null, line)
         })
 
@@ -192,13 +192,13 @@ tman.suite('toa-morgan', function () {
 
     tman.suite(':req', function () {
       tman.it('should get request properties', function (done) {
-        var cb = after(2, function (err, res, line) {
+        let cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.equal(line, 'me')
           done()
         })
 
-        var stream = createLineStream(function (line) {
+        let stream = createLineStream(function (line) {
           cb(null, null, line)
         })
 
@@ -209,13 +209,13 @@ tman.suite('toa-morgan', function () {
       })
 
       tman.it('should display all values of array headers', function (done) {
-        var cb = after(2, function (err, res, line) {
+        let cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.equal(line, 'foo=bar, fizz=buzz')
           done()
         })
 
-        var stream = createLineStream(function (line) {
+        let stream = createLineStream(function (line) {
           cb(null, null, line)
         })
 
@@ -228,13 +228,13 @@ tman.suite('toa-morgan', function () {
 
     tman.suite(':res', function () {
       tman.it('should get response properties', function (done) {
-        var cb = after(2, function (err, res, line) {
+        let cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.equal(line, 'true')
           done()
         })
 
-        var stream = createLineStream(function (line) {
+        let stream = createLineStream(function (line) {
           cb(null, null, line)
         })
 
@@ -244,17 +244,17 @@ tman.suite('toa-morgan', function () {
       })
 
       tman.it('should display all values of array headers', function (done) {
-        var cb = after(2, function (err, res, line) {
+        let cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.equal(line, 'foo, bar')
           done()
         })
 
-        var stream = createLineStream(function (line) {
+        let stream = createLineStream(function (line) {
           cb(null, null, line)
         })
 
-        var server = createServer(':res[x-keys]', {stream: stream}, function () {
+        let server = createServer(':res[x-keys]', {stream: stream}, function () {
           this.set('X-Keys', ['foo', 'bar'])
           this.body = this.ip
         })
@@ -268,14 +268,14 @@ tman.suite('toa-morgan', function () {
 
     tman.suite(':remote-addr', function () {
       tman.it('should get remote address', function (done) {
-        var cb = after(2, function (err, res, line) {
+        let cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.ok(res.text.length > 0)
           assert.equal(line, res.text)
           done()
         })
 
-        var stream = createLineStream(function (line) {
+        let stream = createLineStream(function (line) {
           cb(null, null, line)
         })
 
@@ -285,14 +285,14 @@ tman.suite('toa-morgan', function () {
       })
 
       tman.it('should work when connection: close', function (done) {
-        var cb = after(2, function (err, res, line) {
+        let cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.ok(res.text.length > 0)
           assert.equal(line, res.text)
           done()
         })
 
-        var stream = createLineStream(function (line) {
+        let stream = createLineStream(function (line) {
           cb(null, null, line)
         })
 
@@ -303,7 +303,7 @@ tman.suite('toa-morgan', function () {
       })
 
       tman.it('should work when connection: keep-alive', function (done) {
-        var cb = after(2, function (err, res, line) {
+        let cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.ok(res.text.length > 0)
           assert.equal(line, res.text)
@@ -312,11 +312,11 @@ tman.suite('toa-morgan', function () {
           server.close(done)
         })
 
-        var stream = createLineStream(function (line) {
+        let stream = createLineStream(function (line) {
           cb(null, null, line)
         })
 
-        var server = createServer(':remote-addr', {stream: stream}, function () {
+        let server = createServer(':remote-addr', {stream: stream}, function () {
           this.body = this.ip
           delete this.req._remoteAddress
         })
@@ -328,7 +328,7 @@ tman.suite('toa-morgan', function () {
       })
 
       tman.it('should not fail if req.connection missing', function (done) {
-        var cb = after(2, function (err, res, line) {
+        let cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.ok(res.text.length > 0)
           assert.equal(line, res.text)
@@ -337,11 +337,11 @@ tman.suite('toa-morgan', function () {
           server.close(done)
         })
 
-        var stream = createLineStream(function (line) {
+        let stream = createLineStream(function (line) {
           cb(null, null, line)
         })
 
-        var server = createServer(':remote-addr', {stream: stream}, null, function () {
+        let server = createServer(':remote-addr', {stream: stream}, null, function () {
           this.body = this.ip
           delete this.req.connection
         })
@@ -355,13 +355,13 @@ tman.suite('toa-morgan', function () {
 
     tman.suite(':remote-user', function () {
       tman.it('should be empty if none present', function (done) {
-        var cb = after(2, function (err, res, line) {
+        let cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.equal(line, '-')
           done()
         })
 
-        var stream = createLineStream(function (line) {
+        let stream = createLineStream(function (line) {
           cb(null, null, line)
         })
 
@@ -373,20 +373,20 @@ tman.suite('toa-morgan', function () {
 
     tman.suite(':response-time', function () {
       tman.it('should be in milliseconds', function (done) {
-        var cb = after(2, function (err, res, line) {
+        let cb = after(2, function (err, res, line) {
           if (err) return done(err)
-          var end = Date.now()
-          var ms = parseFloat(line) || 0
+          let end = Date.now()
+          let ms = parseFloat(line) || 0
           assert(ms >= 0)
           assert(ms < end - start + 1)
           done()
         })
 
-        var stream = createLineStream(function (line) {
+        let stream = createLineStream(function (line) {
           cb(null, null, line)
         })
 
-        var start = Date.now()
+        let start = Date.now()
 
         request(createServer(':response-time', {stream: stream}))
           .get('/')
@@ -394,21 +394,21 @@ tman.suite('toa-morgan', function () {
       })
 
       tman.it('should not include response latency', function (done) {
-        var end
-        var cb = after(2, function (err, res, line) {
+        let end
+        let cb = after(2, function (err, res, line) {
           if (err) return done(err)
-          var ms = parseFloat(line)
+          let ms = parseFloat(line)
           assert.ok(ms >= 0, 'positive milliseconds')
           assert.ok(ms < end - start + 10, 'response time expected to be < ' + (end - start + 10) + ', but was ' + ms)
           done()
         })
 
-        var stream = createLineStream(function (line) {
+        let stream = createLineStream(function (line) {
           cb(null, null, line)
         })
 
-        var server = createServer(':response-time', {stream: stream}, function () {
-          var res = this.res
+        let server = createServer(':response-time', {stream: stream}, function () {
+          let res = this.res
           this.status = 200
           this.respond = false
           res.write('hello, ')
@@ -419,7 +419,7 @@ tman.suite('toa-morgan', function () {
           }, 50)
         })
 
-        var start = Date.now()
+        let start = Date.now()
 
         request(server)
           .get('/')
@@ -427,17 +427,17 @@ tman.suite('toa-morgan', function () {
       })
 
       tman.it('should be empty before response', function (done) {
-        var cb = after(2, function (err, res, line) {
+        let cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.equal(line, '-')
           done()
         })
 
-        var stream = createLineStream(function (line) {
+        let stream = createLineStream(function (line) {
           cb(null, null, line)
         })
 
-        var server = createServer(':response-time', {
+        let server = createServer(':response-time', {
           immediate: true,
           stream: stream
         })
@@ -450,13 +450,13 @@ tman.suite('toa-morgan', function () {
 
     tman.suite(':status', function () {
       tman.it('should get response status', function (done) {
-        var cb = after(2, function (err, res, line) {
+        let cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.equal(line, String(res.statusCode))
           done()
         })
 
-        var stream = createLineStream(function (line) {
+        let stream = createLineStream(function (line) {
           cb(null, null, line)
         })
 
@@ -466,17 +466,17 @@ tman.suite('toa-morgan', function () {
       })
 
       tman.it('should not exist before response sent', function (done) {
-        var cb = after(2, function (err, res, line) {
+        let cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.equal(line, '-')
           done()
         })
 
-        var stream = createLineStream(function (line) {
+        let stream = createLineStream(function (line) {
           cb(null, null, line)
         })
 
-        var server = createServer(':status', {
+        let server = createServer(':status', {
           immediate: true,
           stream: stream
         })
@@ -487,31 +487,31 @@ tman.suite('toa-morgan', function () {
       })
 
       tman.it('should not exist for aborted request', function (done) {
-        var stream = createLineStream(function (line) {
+        let stream = createLineStream(function (line) {
           assert.equal(line, '-')
           server.close(done)
         })
 
-        var server = createServer(':status', {stream: stream}, function () {
+        let server = createServer(':status', {stream: stream}, function () {
           return function (next) {
             test.abort()
           }
         })
 
-        var test = request(server).post('/')
+        let test = request(server).post('/')
         test.write('0')
       })
     })
 
     tman.suite(':url', function () {
       tman.it('should get request URL', function (done) {
-        var cb = after(2, function (err, res, line) {
+        let cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.equal(line, '/foo')
           done()
         })
 
-        var stream = createLineStream(function (line) {
+        let stream = createLineStream(function (line) {
           cb(null, null, line)
         })
 
@@ -521,17 +521,17 @@ tman.suite('toa-morgan', function () {
       })
 
       tman.it('should use this.originalUrl if exists', function (done) {
-        var cb = after(2, function (err, res, line) {
+        let cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.equal(line, '/bar')
           done()
         })
 
-        var stream = createLineStream(function (line) {
+        let stream = createLineStream(function (line) {
           cb(null, null, line)
         })
 
-        var server = createServer(':url', {stream: stream}, function () {
+        let server = createServer(':url', {stream: stream}, function () {
           this.body = this.ip
           this.originalUrl = '/bar'
         })
@@ -542,18 +542,18 @@ tman.suite('toa-morgan', function () {
       })
 
       tman.it('should not exist for aborted request', function (done) {
-        var stream = createLineStream(function (line) {
+        let stream = createLineStream(function (line) {
           assert.equal(line, '-')
           server.close(done)
         })
 
-        var server = createServer(':status', {stream: stream}, function () {
+        let server = createServer(':status', {stream: stream}, function () {
           return function (next) {
             test.abort()
           }
         })
 
-        var test = request(server).post('/')
+        let test = request(server).post('/')
         test.write('0')
       })
     })
@@ -562,13 +562,13 @@ tman.suite('toa-morgan', function () {
   tman.suite('formats', function () {
     tman.suite('a function', function () {
       tman.it('should log result of function', function (done) {
-        var cb = after(2, function (err, res, line) {
+        let cb = after(2, function (err, res, line) {
           if (err) return done(err)
           assert.equal(line, 'GET / 200')
           done()
         })
 
-        var stream = createLineStream(function (line) {
+        let stream = createLineStream(function (line) {
           cb(null, null, line)
         })
 
@@ -582,7 +582,7 @@ tman.suite('toa-morgan', function () {
       })
 
       tman.it('should not log for undefined return', function (done) {
-        var stream = createLineStream(function () {
+        let stream = createLineStream(function () {
           throw new Error('should not log line')
         })
 
@@ -596,7 +596,7 @@ tman.suite('toa-morgan', function () {
       })
 
       tman.it('should not log for null return', function (done) {
-        var stream = createLineStream(function () {
+        let stream = createLineStream(function () {
           throw new Error('should not log line')
         })
 
@@ -612,16 +612,16 @@ tman.suite('toa-morgan', function () {
 
     tman.suite('combined', function () {
       tman.it('should match expectations', function (done) {
-        var cb = after(2, function (err, res, line) {
+        let cb = after(2, function (err, res, line) {
           if (err) return done(err)
-          var masked = line
+          let masked = line
             .replace(/\d{2}\/\w{3}\/\d{4}:\d{2}:\d{2}:\d{2} \+0000/, '_timestamp_')
             .replace(/200 \d+/, '200 -')
           assert.equal(masked, res.text + ' - - [_timestamp_] "GET / HTTP/1.1" 200 - "http://localhost/" "my-ua"')
           done()
         })
 
-        var stream = createLineStream(function (line) {
+        let stream = createLineStream(function (line) {
           cb(null, null, line)
         })
 
@@ -635,16 +635,16 @@ tman.suite('toa-morgan', function () {
 
     tman.suite('common', function () {
       tman.it('should match expectations', function (done) {
-        var cb = after(2, function (err, res, line) {
+        let cb = after(2, function (err, res, line) {
           if (err) return done(err)
-          var masked = line
+          let masked = line
             .replace(/\d{2}\/\w{3}\/\d{4}:\d{2}:\d{2}:\d{2} \+0000/, '_timestamp_')
             .replace(/200 \d+/, '200 -')
           assert.equal(masked, res.text + ' - - [_timestamp_] "GET / HTTP/1.1" 200 -')
           done()
         })
 
-        var stream = createLineStream(function (line) {
+        let stream = createLineStream(function (line) {
           cb(null, null, line)
         })
 
@@ -656,19 +656,19 @@ tman.suite('toa-morgan', function () {
 
     tman.suite('dev', function () {
       tman.it('should not color 1xx', function (done) {
-        var cb = after(2, function (err, res, line) {
+        let cb = after(2, function (err, res, line) {
           if (err) return done(err)
-          var masked = line.replace(/\x1b\[(\d+)m/g, '_color_$1_') // eslint-disable-line
+          let masked = line.replace(/\x1b\[(\d+)m/g, '_color_$1_') // eslint-disable-line
           assert.equal(masked.substr(0, 37), '_color_0_GET / _color_0_102 _color_0_')
           assert.equal(masked.substr(-9), '_color_0_')
           done()
         })
 
-        var stream = createLineStream(function (line) {
+        let stream = createLineStream(function (line) {
           cb(null, null, line)
         })
 
-        var server = createServer('dev', {stream: stream}, function () {
+        let server = createServer('dev', {stream: stream}, function () {
           this.status = 102
         })
 
@@ -678,19 +678,19 @@ tman.suite('toa-morgan', function () {
       })
 
       tman.it('should color 2xx green', function (done) {
-        var cb = after(2, function (err, res, line) {
+        let cb = after(2, function (err, res, line) {
           if (err) return done(err)
-          var masked = line.replace(/\x1b\[(\d+)m/g, '_color_$1_') // eslint-disable-line
+          let masked = line.replace(/\x1b\[(\d+)m/g, '_color_$1_') // eslint-disable-line
           assert.equal(masked.substr(0, 38), '_color_0_GET / _color_32_200 _color_0_')
           assert.equal(masked.substr(-9), '_color_0_')
           done()
         })
 
-        var stream = createLineStream(function (line) {
+        let stream = createLineStream(function (line) {
           cb(null, null, line)
         })
 
-        var server = createServer('dev', {stream: stream}, function () {
+        let server = createServer('dev', {stream: stream}, function () {
           this.status = 200
           this.body = this.ip
         })
@@ -701,19 +701,19 @@ tman.suite('toa-morgan', function () {
       })
 
       tman.it('should color 3xx cyan', function (done) {
-        var cb = after(2, function (err, res, line) {
+        let cb = after(2, function (err, res, line) {
           if (err) return done(err)
-          var masked = line.replace(/\x1b\[(\d+)m/g, '_color_$1_') // eslint-disable-line
+          let masked = line.replace(/\x1b\[(\d+)m/g, '_color_$1_') // eslint-disable-line
           assert.equal(masked.substr(0, 38), '_color_0_GET / _color_36_300 _color_0_')
           assert.equal(masked.substr(-9), '_color_0_')
           done()
         })
 
-        var stream = createLineStream(function (line) {
+        let stream = createLineStream(function (line) {
           cb(null, null, line)
         })
 
-        var server = createServer('dev', {stream: stream}, function () {
+        let server = createServer('dev', {stream: stream}, function () {
           this.status = 300
         })
 
@@ -723,19 +723,19 @@ tman.suite('toa-morgan', function () {
       })
 
       tman.it('should color 4xx yelow', function (done) {
-        var cb = after(2, function (err, res, line) {
+        let cb = after(2, function (err, res, line) {
           if (err) return done(err)
-          var masked = line.replace(/\x1b\[(\d+)m/g, '_color_$1_') // eslint-disable-line
+          let masked = line.replace(/\x1b\[(\d+)m/g, '_color_$1_') // eslint-disable-line
           assert.equal(masked.substr(0, 38), '_color_0_GET / _color_33_400 _color_0_')
           assert.equal(masked.substr(-9), '_color_0_')
           done()
         })
 
-        var stream = createLineStream(function (line) {
+        let stream = createLineStream(function (line) {
           cb(null, null, line)
         })
 
-        var server = createServer('dev', {stream: stream}, function () {
+        let server = createServer('dev', {stream: stream}, function () {
           this.status = 400
         })
 
@@ -745,19 +745,19 @@ tman.suite('toa-morgan', function () {
       })
 
       tman.it('should color 5xx red', function (done) {
-        var cb = after(2, function (err, res, line) {
+        let cb = after(2, function (err, res, line) {
           if (err) return done(err)
-          var masked = line.replace(/\x1b\[(\d+)m/g, '_color_$1_') // eslint-disable-line
+          let masked = line.replace(/\x1b\[(\d+)m/g, '_color_$1_') // eslint-disable-line
           assert.equal(masked.substr(0, 38), '_color_0_GET / _color_31_500 _color_0_')
           assert.equal(masked.substr(-9), '_color_0_')
           done()
         })
 
-        var stream = createLineStream(function (line) {
+        let stream = createLineStream(function (line) {
           cb(null, null, line)
         })
 
-        var server = createServer('dev', {stream: stream}, function () {
+        let server = createServer('dev', {stream: stream}, function () {
           this.status = 500
         })
 
@@ -769,14 +769,14 @@ tman.suite('toa-morgan', function () {
 
     tman.suite('short', function () {
       tman.it('should match expectations', function (done) {
-        var cb = after(2, function (err, res, line) {
+        let cb = after(2, function (err, res, line) {
           if (err) return done(err)
-          var masked = line.replace(/\d+ ms/, '- ms').replace(/200 \d+/, '200 -')
+          let masked = line.replace(/\d+ ms/, '- ms').replace(/200 \d+/, '200 -')
           assert.equal(masked, res.text + ' - GET / HTTP/1.1 200 - - - ms')
           done()
         })
 
-        var stream = createLineStream(function (line) {
+        let stream = createLineStream(function (line) {
           cb(null, null, line)
         })
 
@@ -788,14 +788,14 @@ tman.suite('toa-morgan', function () {
 
     tman.suite('tiny', function () {
       tman.it('should match expectations', function (done) {
-        var cb = after(2, function (err, res, line) {
+        let cb = after(2, function (err, res, line) {
           if (err) return done(err)
-          var masked = line.replace(/200 \d+/, '200 -').replace(/\d+ ms/, '- ms')
+          let masked = line.replace(/200 \d+/, '200 -').replace(/\d+ ms/, '- ms')
           assert.equal(masked, 'GET / 200 - - - ms')
           done()
         })
 
-        var stream = createLineStream(function (line) {
+        let stream = createLineStream(function (line) {
           cb(null, null, line)
         })
 
@@ -808,17 +808,17 @@ tman.suite('toa-morgan', function () {
 
   tman.suite('with immediate option', function () {
     tman.it('should not have value for :res', function (done) {
-      var cb = after(2, function (err, res, line) {
+      let cb = after(2, function (err, res, line) {
         if (err) return done(err)
         assert.equal(line, 'GET / -')
         done()
       })
 
-      var stream = createLineStream(function (line) {
+      let stream = createLineStream(function (line) {
         cb(null, null, line)
       })
 
-      var server = createServer(':method :url :res[x-sent]', {
+      let server = createServer(':method :url :res[x-sent]', {
         immediate: true,
         stream: stream
       })
@@ -829,17 +829,17 @@ tman.suite('toa-morgan', function () {
     })
 
     tman.it('should not have value for :response-time', function (done) {
-      var cb = after(2, function (err, res, line) {
+      let cb = after(2, function (err, res, line) {
         if (err) return done(err)
         assert.equal(line, 'GET / -')
         done()
       })
 
-      var stream = createLineStream(function (line) {
+      let stream = createLineStream(function (line) {
         cb(null, null, line)
       })
 
-      var server = createServer(':method :url :response-time', {
+      let server = createServer(':method :url :response-time', {
         immediate: true,
         stream: stream
       })
@@ -850,17 +850,17 @@ tman.suite('toa-morgan', function () {
     })
 
     tman.it('should not have value for :status', function (done) {
-      var cb = after(2, function (err, res, line) {
+      let cb = after(2, function (err, res, line) {
         if (err) return done(err)
         assert.equal(line, 'GET / -')
         done()
       })
 
-      var stream = createLineStream(function (line) {
+      let stream = createLineStream(function (line) {
         cb(null, null, line)
       })
 
-      var server = createServer(':method :url :status', {
+      let server = createServer(':method :url :status', {
         immediate: true,
         stream: stream
       })
@@ -871,19 +871,19 @@ tman.suite('toa-morgan', function () {
     })
 
     tman.it('should log before response', function (done) {
-      var lineLogged = false
-      var cb = after(2, function (err, res, line) {
+      let lineLogged = false
+      let cb = after(2, function (err, res, line) {
         if (err) return done(err)
         assert.equal(line, 'GET / -')
         done()
       })
 
-      var stream = createLineStream(function (line) {
+      let stream = createLineStream(function (line) {
         lineLogged = true
         cb(null, null, line)
       })
 
-      var server = createServer(':method :url :res[x-sent]', { immediate: true, stream: stream }, function () {
+      let server = createServer(':method :url :res[x-sent]', { immediate: true, stream: stream }, function () {
         assert.ok(lineLogged)
         this.body = this.ip
       })
@@ -896,7 +896,7 @@ tman.suite('toa-morgan', function () {
 
   tman.suite('with skip option', function () {
     tman.it('should be able to skip based on request', function (done) {
-      var stream = createLineStream(function () {
+      let stream = createLineStream(function () {
         throw new Error('should not log line')
       })
 
@@ -911,7 +911,7 @@ tman.suite('toa-morgan', function () {
     })
 
     tman.it('should be able to skip based on response', function (done) {
-      var stream = createLineStream(function () {
+      let stream = createLineStream(function () {
         throw new Error('should not log line')
       })
 
@@ -927,8 +927,8 @@ tman.suite('toa-morgan', function () {
 })
 
 function after (count, callback) {
-  var i = 0
-  var args = new Array(3)
+  let i = 0
+  let args = new Array(3)
 
   return function (err, res, line) {
     assert.ok(i++ < count, 'callback called ' + count + ' times')
@@ -945,11 +945,12 @@ function createLineStream (callback) {
 }
 
 function createServer (format, opts, mainFn) {
-  var app = Toa(mainFn || function () {
+  let app = new Toa()
+  app.use(morgan(format, opts))
+  app.use(mainFn || function () {
     this.set('X-Sent', 'true')
     this.body = this.ip || '-'
   })
 
-  app.use(morgan(format, opts))
   return app.listen()
 }

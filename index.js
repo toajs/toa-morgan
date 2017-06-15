@@ -19,13 +19,13 @@ function toaMorgan (format, options) {
   options = options || {}
 
   // output on request instead of response
-  var immediate = !!options.immediate
+  const immediate = !!options.immediate
   // check if log entry should be skipped
-  var skip = typeof options.skip === 'function' ? options.skip : null
+  const skip = typeof options.skip === 'function' ? options.skip : null
   // format function
-  var formatLine = compile(formats[format] || format)
+  const formatLine = compile(formats[format] || format)
   // stream
-  var stream = options.stream || process.stdout
+  const stream = options.stream || process.stdout
 
   return function logger (done) {
     this._startTime = Date.now()
@@ -45,7 +45,7 @@ function toaMorgan (format, options) {
 
   function logRequest () {
     if (skip && skip.call(this)) return
-    var line = formatLine.call(this)
+    let line = formatLine.call(this)
     if (line != null) stream.write(line + '\n')
   }
 }
@@ -57,9 +57,9 @@ function toaMorgan (format, options) {
  * @param {string|function} format
  * @public
  */
-var formats = Object.create(null)
+const formats = Object.create(null)
 toaMorgan.format = function (name, format) {
-  var type = typeof format
+  let type = typeof format
   if (type !== 'string' && type !== 'function') {
     throw new TypeError('argument format must be a string or a function')
   }
@@ -75,7 +75,7 @@ toaMorgan.format = function (name, format) {
  * @param {function} fn
  * @public
  */
-var tokens = Object.create(null)
+const tokens = Object.create(null)
 toaMorgan.token = function (name, fn) {
   if (typeof fn !== 'function') {
     throw new TypeError('argument fn must be a function')
@@ -109,20 +109,20 @@ toaMorgan.format('tiny', ':method :url :status :res[content-length] - :response-
  */
 toaMorgan.format('dev', function developmentFormatLine () {
   // get the status code if response written
-  var status = this.status
+  let status = this.status
   // get status color
-  var color = status >= 500 ? 31 // red
+  let color = status >= 500 ? 31 // red
     : status >= 400 ? 33 // yellow
     : status >= 300 ? 36 // cyan
     : status >= 200 ? 32 // green
     : 0 // no color
 
   // get colored function
-  var fn = developmentFormatLine[color]
+  let fn = developmentFormatLine[color]
 
   if (!fn) {
     // compile
-    var format = '\x1b[0m:method :url \x1b[' + color +
+    let format = '\x1b[0m:method :url \x1b[' + color +
       'm:status \x1b[0m:response-time ms - :res[content-length]\x1b[0m'
     fn = developmentFormatLine[color] = compile(format)
   }
@@ -155,7 +155,7 @@ toaMorgan.token('response-time', function () {
  * current date
  */
 toaMorgan.token('date', function (format) {
-  var date = this._endTime ? new Date(this._endTime) : new Date()
+  let date = this._endTime ? new Date(this._endTime) : new Date()
 
   switch (format || 'web') {
     case 'clf':
@@ -213,7 +213,7 @@ toaMorgan.token('user-agent', function () {
  * request header
  */
 toaMorgan.token('req', function (field) {
-  var header = this.get(field)
+  let header = this.get(field)
   return Array.isArray(header) ? header.join(', ') : header
 })
 
@@ -221,7 +221,7 @@ toaMorgan.token('req', function (field) {
  * response header
  */
 toaMorgan.token('res', function (field) {
-  var header = this.response.get(field)
+  let header = this.response.get(field)
   return Array.isArray(header) ? header.join(', ') : header
 })
 
@@ -232,14 +232,14 @@ toaMorgan.token('res', function (field) {
  * @return {function}
  * @private
  */
-var regex = /:([-\w]{2,})(?:\[([^\]]+)\])?/
+const regex = /:([-\w]{2,})(?:\[([^\]]+)])?/
 function compile (str) {
   if (typeof str === 'function') return str
   if (typeof str !== 'string') throw new TypeError('argument format must be a string')
 
-  var fns = []
-  var tokenFn = 0
-  var res = regex.exec(str)
+  let fns = []
+  let tokenFn = 0
+  let res = regex.exec(str)
 
   while (res) {
     if (res.index) fns.push(compileStr(str.slice(0, res.index)))
@@ -253,10 +253,8 @@ function compile (str) {
   if (str) fns.push(compileStr(str))
 
   return function () {
-    var ctx = this
-    return fns.reduce(function (log, fn) {
-      return log + toStr(fn.call(ctx))
-    }, '')
+    let ctx = this
+    return fns.reduce((log, fn) => log + toStr(fn.call(ctx)), '')
   }
 }
 
@@ -269,7 +267,7 @@ function compile (str) {
  * @private
  */
 function compileToken (token, arg) {
-  var fn = tokens[token] || noOp
+  let fn = tokens[token] || noOp
 
   return function () {
     return arg ? fn.call(this, arg) : fn.call(this)
@@ -284,9 +282,7 @@ function compileToken (token, arg) {
  * @private
  */
 function compileStr (str) {
-  return function () {
-    return str
-  }
+  return () => str
 }
 
 /**
@@ -296,18 +292,18 @@ function compileStr (str) {
  * @return {string}
  * @private
  */
-var clfmonth = [
+const clfmonth = [
   'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
   'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
 ]
 function clfdate (dateTime) {
-  var date = dateTime.getUTCDate()
-  var hour = dateTime.getUTCHours()
-  var mins = dateTime.getUTCMinutes()
-  var secs = dateTime.getUTCSeconds()
-  var year = dateTime.getUTCFullYear()
+  let date = dateTime.getUTCDate()
+  let hour = dateTime.getUTCHours()
+  let mins = dateTime.getUTCMinutes()
+  let secs = dateTime.getUTCSeconds()
+  let year = dateTime.getUTCFullYear()
 
-  var month = clfmonth[dateTime.getUTCMonth()]
+  let month = clfmonth[dateTime.getUTCMonth()]
 
   return pad2(date) + '/' + month + '/' + year + ':' +
     pad2(hour) + ':' + pad2(mins) + ':' + pad2(secs) + ' +0000'
@@ -321,7 +317,7 @@ function clfdate (dateTime) {
  * @private
  */
 function pad2 (num) {
-  var str = String(num)
+  let str = String(num)
   return (str.length === 1 ? '0' : '') + str
 }
 
